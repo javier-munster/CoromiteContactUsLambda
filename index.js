@@ -35,17 +35,16 @@ exports.handler = async(event) => {
                 },
                 Message: {
                     Subject: {
-                        Charset: "UTF-8",
                         Data: "Coromite - New Contact"
                     },
-                    Text: {
-                        Charset: "UTF-8",
-                        Data: `First Name: ${firstName}\nLast Name: ${lastName}\nemail: ${email}\n\nMessage:\n${message}`
-                    },
-                    // Html: {
-                    //     Charset: "UTF-8",
-                    //     Data: `<h1>Coromite - New Contact</h1><p>First Name: ${firstName}</p><p>Last Name: ${lastName}</p><p>email: ${email}</p><p>Message: ${message}</p>`
-                    // }
+                    Body: {
+                        Text: {
+                            Data: `First Name: ${firstName}\nLast Name: ${lastName}\nemail: ${email}\n\nMessage:\n${message}`
+                        }
+                        // Html: {
+                        //     Data: `<h1>Coromite - New Contact</h1><p>First Name: ${firstName}</p><p>Last Name: ${lastName}</p><p>email: ${email}</p><p>Message: ${message}</p>`
+                        // }
+                    }
                 },
                 Source: "noreply@coromite.com",
             }, (err, data) => {
