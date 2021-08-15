@@ -2,8 +2,8 @@
 const AWS = require('aws-sdk');
 const ses = new AWS.SESV2({ apiVersion: '2019-09-27' });
 
-const ToAddress = !!process.env.TO_ADDRESS ? process.env.TO_ADDRESS.split(',') : ["contact@coromite.com"];
-const CcAddress = !!process.env.CC_ADDRESS ? process.env.CC_ADDRESS.split(',') : [];
+const ToAddresses = !!process.env.TO_ADDRESS ? process.env.TO_ADDRESS.split(',') : ["contact@coromite.com"];
+const CcAddresses = !!process.env.CC_ADDRESS ? process.env.CC_ADDRESS.split(',') : [];
 
 function isValidBody({ firstName, lastName, email, message }) {
     const isValidString = (data, isRequired = false) => {
@@ -30,23 +30,25 @@ exports.handler = async(event) => {
         return new Promise((resolve) => {
             return ses.sendEmail({
                 Destination: {
-                    ToAddress,
-                    CcAddress
+                    ToAddresses,
+                    CcAddresses
                 },
-                Message: {
-                    Subject: {
-                        Data: "Coromite - New Contact"
-                    },
-                    Body: {
-                        Text: {
-                            Data: `First Name: ${firstName}\nLast Name: ${lastName}\nemail: ${email}\n\nMessage:\n${message}`
+                Content: {
+                    Simple: {
+                        Subject: {
+                            Data: "Coromite - New Contact"
+                        },
+                        Body: {
+                            Text: {
+                                Data: `First Name: ${firstName}\nLast Name: ${lastName}\nemail: ${email}\n\nMessage:\n${message}`
+                            }
+                            // Html: {
+                            //     Data: `<h1>Coromite - New Contact</h1><p>First Name: ${firstName}</p><p>Last Name: ${lastName}</p><p>email: ${email}</p><p>Message: ${message}</p>`
+                            // }
                         }
-                        // Html: {
-                        //     Data: `<h1>Coromite - New Contact</h1><p>First Name: ${firstName}</p><p>Last Name: ${lastName}</p><p>email: ${email}</p><p>Message: ${message}</p>`
-                        // }
                     }
                 },
-                Source: "noreply@coromite.com",
+                FromEmailAddress: "noreply@coromite.com",
             }, (err, data) => {
                 if (err) {
                     console.error("Error sending email:", err);
