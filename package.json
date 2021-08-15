@@ -1,0 +1,14 @@
+{
+  "name": "contactuslambda",
+  "version": "1.0.0",
+  "description": "Emails form content sent from coromite.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "javier",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.968.0"
+  }
+}

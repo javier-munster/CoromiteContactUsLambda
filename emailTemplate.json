@@ -1,0 +1,8 @@
+{
+    "Template": {
+        "TemplateName": "ContactUs",
+        "SubjectPart": "Consulting Inquiry",
+        "HtmlPart": "<h1>From: {{first_name}},</h1><p>Your favorite animal is {{favoriteanimal}}.</p>",
+        "TextPart": "Dear {{name}},\r\nYour favorite animal is {{favoriteanimal}}."
+    }
+}
