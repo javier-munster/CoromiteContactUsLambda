@@ -15,6 +15,12 @@ function isValidBody({ firstName, lastName, email, message }) {
 }
 
 exports.handler = async(event) => {
+    const headers = {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "https://coromite.com",
+        "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+    };
+
     try {
         const { firstName, lastName, email, message } = JSON.parse(event.body);
 
@@ -23,7 +29,8 @@ exports.handler = async(event) => {
         if (!isValidBody({ firstName, lastName, email, message })) {
             console.warn("Invalid body!");
             return Promise.resolve({
-                statusCode: 422
+                statusCode: 422,
+                headers
             });
         }
 
@@ -53,20 +60,23 @@ exports.handler = async(event) => {
                 if (err) {
                     console.error("Error sending email:", err);
                     return resolve({
-                        statusCode: 500
+                        statusCode: 500,
+                        headers
                     });
                 }
 
                 console.log("Email sent:", data);
                 return resolve({
-                    statusCode: 200
+                    statusCode: 204,
+                    headers
                 })
             });
         });
     } catch (err) {
         console.error("Error handling request:", err);
         return Promise.resolve({
-            statusCode: 500
+            statusCode: 500,
+            headers
         });
     }
 };
