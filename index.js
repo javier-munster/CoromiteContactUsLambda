@@ -5,28 +5,28 @@ const ses = new AWS.SESV2({ apiVersion: '2019-09-27' });
 const ToAddresses = !!process.env.TO_ADDRESS ? process.env.TO_ADDRESS.split(',') : ["contact@coromite.com"];
 const CcAddresses = !!process.env.CC_ADDRESS ? process.env.CC_ADDRESS.split(',') : [];
 
-function isValidBody({ firstName, lastName, email, message }) {
+function isValidBody({ name, company, email, phone, message }) {
     const isValidString = (data, isRequired = false) => {
         return typeof data === "string" && (isRequired ? !!data : true);
     }
 
     // For now, no fields are required. I want to see who is trying to reach Coromite. In the future, this might change.
-    return isValidString(firstName) && isValidString(lastName) && isValidString(email) && isValidString(message);
+    return isValidString(name) && isValidString(email) && isValidString(phone);
 }
 
 exports.handler = async(event) => {
     const headers = {
         "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": "https://coromite.com",
+        "Access-Control-Allow-Origin": "https://cobbswinery.com",
         "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
     };
 
     try {
-        const { firstName, lastName, email, message } = JSON.parse(event.body);
+        const { name, company, email, phone, message } = JSON.parse(event.body);
 
-        console.log("Invoked:", { firstName, lastName, email, message });
+        console.log("Invoked:", { name, company, email, phone, message });
 
-        if (!isValidBody({ firstName, lastName, email, message })) {
+        if (!isValidBody({ name, company, email, phone, message })) {
             console.warn("Invalid body!");
             return Promise.resolve({
                 statusCode: 422,
@@ -43,11 +43,11 @@ exports.handler = async(event) => {
                 Content: {
                     Simple: {
                         Subject: {
-                            Data: "Coromite - New Contact"
+                            Data: "Cobb's Winery - New Contact"
                         },
                         Body: {
                             Text: {
-                                Data: `First Name: ${firstName}\nLast Name: ${lastName}\nemail: ${email}\n\nMessage:\n${message}`
+                                Data: `Name: ${name}\nCompany: ${company}\nemail: ${email}\nPhone: ${phone}\n\nMessage:\n${message}`
                             }
                             // Html: {
                             //     Data: `<h1>Coromite - New Contact</h1><p>First Name: ${firstName}</p><p>Last Name: ${lastName}</p><p>email: ${email}</p><p>Message: ${message}</p>`
