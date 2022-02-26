@@ -2,7 +2,7 @@
 const AWS = require('aws-sdk');
 const ses = new AWS.SESV2({ apiVersion: '2019-09-27' });
 
-const ToAddresses = !!process.env.TO_ADDRESS ? process.env.TO_ADDRESS.split(',') : ["contact@coromite.com"];
+const ToAddresses = !!process.env.TO_ADDRESS ? process.env.TO_ADDRESS.split(',') : ["info@cobbswinery.com"];
 const CcAddresses = !!process.env.CC_ADDRESS ? process.env.CC_ADDRESS.split(',') : [];
 
 function isValidBody({ name, company, email, phone, message }) {
@@ -55,7 +55,7 @@ exports.handler = async(event) => {
                         }
                     }
                 },
-                FromEmailAddress: "noreply@coromite.com",
+                FromEmailAddress: "noreply@cobbswinery.com",
             }, (err, data) => {
                 if (err) {
                     console.error("Error sending email:", err);
